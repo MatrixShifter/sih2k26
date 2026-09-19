@@ -17,7 +17,7 @@ class VerificationResult(Base):
     document_id: Mapped[Optional[int]] = mapped_column(ForeignKey("documents.id"))
     check_key: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
     source: Mapped[str] = mapped_column(String(80), nullable=False)
-    status: Mapped[str] = mapped_column(String(20), nullable=False)
+    status: Mapped[str] = mapped_column(String(50), nullable=False)
     simulated: Mapped[bool] = mapped_column(default=True)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     payload: Mapped[Optional[Any]] = mapped_column(JSON)

@@ -15,7 +15,7 @@ class AuditLog(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     sequence_number: Mapped[Optional[int]] = mapped_column(Integer, index=True, nullable=True)
     actor_user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"), index=True)
-    actor_role: Mapped[Optional[str]] = mapped_column(String(20))
+    actor_role: Mapped[Optional[str]] = mapped_column(String(60))
     action: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
     entity_type: Mapped[str] = mapped_column(String(80), nullable=False)
     entity_id: Mapped[Optional[int]] = mapped_column(Integer)

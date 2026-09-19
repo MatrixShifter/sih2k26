@@ -22,7 +22,7 @@ class DeliveryBatch(Base):
     failed_units: Mapped[int] = mapped_column(Integer, default=0)
     delivery_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     delivery_location: Mapped[str] = mapped_column(String(255), nullable=False)
-    status: Mapped[str] = mapped_column(String(30), default="RECEIVED")  # RECEIVED, INSPECTION_IN_PROGRESS, ACCEPTED, FLAGGED_MISMATCH
+    status: Mapped[str] = mapped_column(String(80), default="RECEIVED")  # RECEIVED, INSPECTION_IN_PROGRESS, ACCEPTED, FLAGGED_MISMATCH
     notes: Mapped[Optional[str]] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -52,7 +52,7 @@ class ProductAsset(Base):
     actual_spec: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
     
     # Verification status
-    inspection_status: Mapped[str] = mapped_column(String(30), default="PENDING")  # PENDING, PASS, MISMATCH, NEEDS_PHYSICAL_INSPECTION
+    inspection_status: Mapped[str] = mapped_column(String(80), default="PENDING")  # PENDING, PASS, MISMATCH, NEEDS_PHYSICAL_INSPECTION
     mismatch_details: Mapped[Optional[Any]] = mapped_column(JSON, nullable=True)
     inspection_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     
@@ -78,7 +78,7 @@ class PhysicalInspectionRequest(Base):
     requested_by_name: Mapped[str] = mapped_column(String(120), nullable=False)
     target_components: Mapped[Any] = mapped_column(JSON, nullable=False)  # e.g. ["SSD", "RAM"]
     instructions: Mapped[str] = mapped_column(Text, nullable=False)
-    status: Mapped[str] = mapped_column(String(30), default="OPEN")  # OPEN, IN_PROGRESS, RESOLVED, REJECTED
+    status: Mapped[str] = mapped_column(String(80), default="OPEN")  # OPEN, IN_PROGRESS, RESOLVED, REJECTED
     findings: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -115,7 +115,7 @@ class InspectionCase(Base):
     officer_remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     
     # Final Decision: PENDING, ACCEPT, REJECT, RETEST, HOLD, REQUEST_CLARIFICATION
-    final_decision: Mapped[str] = mapped_column(String(40), default="PENDING")
+    final_decision: Mapped[str] = mapped_column(String(80), default="PENDING")
     decision_justification: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     decided_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     decided_by_name: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)

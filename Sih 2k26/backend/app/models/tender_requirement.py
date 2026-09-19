@@ -20,7 +20,7 @@ class TenderRequirement(Base):
     category: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
     mandatory: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     required_value: Mapped[Optional[str]] = mapped_column(String(255))
-    comparison_operator: Mapped[Optional[str]] = mapped_column(String(20), default=">=")
+    comparison_operator: Mapped[Optional[str]] = mapped_column(String(50), default=">=")
     weight: Mapped[Optional[float]] = mapped_column(default=10.0)
     threshold: Mapped[Optional[float]] = mapped_column()
     currency: Mapped[Optional[str]] = mapped_column(String(8))

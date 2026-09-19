@@ -2,7 +2,7 @@
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect, text
 
@@ -82,6 +82,7 @@ def root() -> dict[str, str]:
 
 
 @app.get("/health")
+@app.get("/api/health")
 def health() -> dict[str, str]:
     db_status = "ok"
     try:
@@ -90,4 +91,19 @@ def health() -> dict[str, str]:
     except Exception:
         db_status = "degraded"
     return {"status": "ok", "service": settings.app_name, "database": db_status}
+
+
+@app.get("/health/db")
+@app.get("/api/health/db")
+def health_db() -> dict[str, str]:
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return {"status": "ok", "database": "connected"}
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database connection unavailable"
+        )
+
 
