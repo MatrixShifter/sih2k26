@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased selection:bg-slate-900 selection:text-white font-sans;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-blue-600;
+}
+
+/* Modern subtle enterprise scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7);
+}
+
+/* Clean enterprise panels */
+.gov-panel {
+  @apply bg-white border border-slate-200 rounded-xl shadow-sm;
+}
+
+.gov-table {
+  @apply min-w-full divide-y divide-slate-200 text-xs text-left;
+}
+
+.gov-th {
+  @apply px-3.5 py-2.5 bg-slate-100/80 text-slate-700 font-semibold uppercase tracking-wider text-[11px] select-none;
+}
+
+.gov-td {
+  @apply px-3.5 py-2.5 text-slate-800 border-b border-slate-100 align-middle;
+}
