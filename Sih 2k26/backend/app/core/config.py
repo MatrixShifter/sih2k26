@@ -25,11 +25,6 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:8080,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:8080"
     frontend_url: str = ""
 
-    # Optional Supabase parameters
-    supabase_url: str = ""
-    supabase_anon_key: str = ""
-    supabase_service_role_key: str = ""
-
     upload_dir: str = "./uploads"
     max_upload_mb: int = 15
 
