@@ -1,8 +1,28 @@
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
 .venv/
+env/
 venv/
-.env
-uploads/
+ENV/
+build/
+dist/
 *.egg-info/
-.pytest_cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+complygem.db
+
+# Environment variables
+.env
+.env.local
+.env.production
+!.env.example
+
+# Uploads
+uploads/*
+!uploads/.gitkeep

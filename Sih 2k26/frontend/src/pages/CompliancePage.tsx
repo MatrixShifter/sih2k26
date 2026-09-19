@@ -262,7 +262,7 @@ export function CompliancePage() {
             href={selectedBidId ? api.documentUrl(selectedBidId) : "#"}
             onClick={(e) => {
               e.preventDefault();
-              if (selectedBidId) window.open(`http://localhost:8000/api/bids/${selectedBidId}/report`, "_blank");
+              if (selectedBidId) window.open(api.getBidReportUrl(selectedBidId), "_blank");
             }}
             className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-xs transition"
           >

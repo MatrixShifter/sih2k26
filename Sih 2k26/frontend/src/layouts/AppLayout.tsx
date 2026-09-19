@@ -30,6 +30,7 @@ import {
 import { homeForRole, useAuth } from "../context/AuthContext";
 import { NotificationBell } from "../components/NotificationBell";
 import { GuidedDemoController } from "../components/GuidedDemoController";
+import { api } from "../services/api";
 
 export function AppLayout() {
   const { user, logout } = useAuth();
@@ -326,7 +327,7 @@ export function AppLayout() {
 
             {/* Direct Swagger API Reference */}
             <a
-              href="http://localhost:8000/docs"
+              href={api.getDocsUrl()}
               target="_blank"
               rel="noreferrer"
               className="hidden xl:inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition"

@@ -60,7 +60,7 @@ export function ReportsPage() {
   }
 
   function handlePrintDirect(bidId: number) {
-    window.open(`http://localhost:8000/api/bids/${bidId}/report`, "_blank");
+    window.open(api.getBidReportUrl(bidId), "_blank");
   }
 
   const filteredBids = bids.filter((b) => {

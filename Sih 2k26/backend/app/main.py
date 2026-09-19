@@ -35,10 +35,12 @@ def _ensure_sqlite_schema() -> None:
 async def lifespan(_app: FastAPI):
     _ensure_sqlite_schema()
     Base.metadata.create_all(bind=engine)
-    if settings.database_url.startswith("sqlite"):
+    try:
         from seed import seed
 
         seed()
+    except Exception as exc:
+        print(f"Database seed note: {exc}")
     yield
 
 
@@ -81,4 +83,11 @@ def root() -> dict[str, str]:
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok", "service": settings.app_name}
+    db_status = "ok"
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+    except Exception:
+        db_status = "degraded"
+    return {"status": "ok", "service": settings.app_name, "database": db_status}
+

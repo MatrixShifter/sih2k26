@@ -16,7 +16,11 @@ import type {
   User,
 } from "../types";
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? "";
+const API_BASE = (
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_BASE ||
+  ""
+).replace(/\/+$/, "");
 
 export class ApiError extends Error {
   status: number;
@@ -49,7 +53,21 @@ async function request<T>(
   const t = token();
   if (t) headers.set("Authorization", `Bearer ${t}`);
 
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers });
+  const targetUrl = path.startsWith("http://") || path.startsWith("https://")
+    ? path
+    : `${API_BASE}${path}`;
+
+  let res: Response;
+  try {
+    res = await fetch(targetUrl, { ...init, headers });
+  } catch (networkErr: any) {
+    throw new ApiError(
+      0,
+      "NETWORK_ERROR",
+      networkErr?.message || "Unable to connect to ComplyGeM backend. Please verify your connection or service status."
+    );
+  }
+
   if (res.status === 204) return undefined as T;
   if (asText) {
     if (!res.ok) throw new ApiError(res.status, "http_error", res.statusText);
@@ -58,11 +76,9 @@ async function request<T>(
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = data?.error;
-    throw new ApiError(
-      res.status,
-      err?.code ?? "http_error",
-      err?.message ?? res.statusText
-    );
+    const msg = err?.message || data?.detail || data?.message || res.statusText || "Request failed";
+    const code = err?.code || (typeof data?.detail === "string" ? "HTTP_ERROR" : "http_error");
+    throw new ApiError(res.status, code, msg);
   }
   return data as T;
 }
@@ -579,6 +595,10 @@ export const api = {
       method: "PUT",
       body: JSON.stringify(payload),
     }),
+  getApiBaseUrl: () => API_BASE,
+  getBidReportUrl: (id: number) => `${API_BASE}/api/bids/${id}/report`,
+  getDocsUrl: () => `${API_BASE}/docs`,
 };
 
 export type { BidListItem };
+
