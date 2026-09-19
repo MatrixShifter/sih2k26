@@ -33,8 +33,11 @@ def _ensure_sqlite_schema() -> None:
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    _ensure_sqlite_schema()
-    Base.metadata.create_all(bind=engine)
+    try:
+        _ensure_sqlite_schema()
+        Base.metadata.create_all(bind=engine)
+    except Exception as exc:
+        print(f"Database schema initialization note: {exc}")
     try:
         from seed import seed
 

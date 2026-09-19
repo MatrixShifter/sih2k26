@@ -1,5 +1,6 @@
 """Application settings loaded from environment variables."""
 
+import os
 from functools import lru_cache
 from typing import List
 
@@ -25,14 +26,14 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://localhost:8080,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:8080,https://complygem-frontend.vercel.app"
     frontend_url: str = ""
 
-    upload_dir: str = "./uploads"
+    upload_dir: str = Field(default_factory=lambda: "/tmp/uploads" if os.environ.get("VERCEL") else "./uploads")
     max_upload_mb: int = 15
 
     @field_validator("database_url", mode="before")
     @classmethod
     def _normalize_db_url(cls, value: str | None) -> str:
         if not value:
-            return "sqlite:///./complygem.db"
+            return "sqlite:////tmp/complygem.db" if os.environ.get("VERCEL") else "sqlite:///./complygem.db"
         val = str(value).strip().strip('"').strip("'")
         if "pgbouncer=true" in val:
             val = val.replace("?pgbouncer=true&", "?")

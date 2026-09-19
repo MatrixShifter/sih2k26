@@ -23,18 +23,23 @@ from app.services.tender_parser import DEFAULT_MEDICAL_SOURCE, extract_requireme
 from app.services.verification_service import run_verification  # noqa: E402
 from app.utils.ids import bid_reference  # noqa: E402
 
-UPLOADS = Path("./uploads")
+from app.core.config import get_settings
+
+UPLOADS = Path(get_settings().upload_dir)
 DEMO_PASSWORD = "Gem@2026!"
 
 
 def _pdf(rel: str, label: str) -> str:
-    path = UPLOADS / rel
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not path.exists():
-        path.write_bytes(
-            b"%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%% ComplyGeM AI sample artefact: " + label.encode() + b"\n"
-        )
-    return str(path)
+    try:
+        path = UPLOADS / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists():
+            path.write_bytes(
+                b"%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%% ComplyGeM AI sample artefact: " + label.encode() + b"\n"
+            )
+        return str(path)
+    except Exception:
+        return f"/tmp/uploads/{rel}"
 
 
 def seed() -> None:

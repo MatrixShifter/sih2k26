@@ -9,7 +9,9 @@ backend_dir = Path(__file__).resolve().parent.parent
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
-# Ensure working directory is backend root
+if os.environ.get("VERCEL"):
+    os.environ.setdefault("UPLOAD_DIR", "/tmp/uploads")
+
 try:
     os.chdir(str(backend_dir))
 except Exception:
@@ -18,4 +20,5 @@ except Exception:
 from app.main import app
 
 # Expose both app and handler for Vercel Python runtime
+app = app
 handler = app
