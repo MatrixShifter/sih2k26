@@ -22,7 +22,7 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./complygem.db"
 
-    cors_origins: str = "http://localhost:5173,http://localhost:8080,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:8080"
+    cors_origins: str = "http://localhost:5173,http://localhost:8080,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:8080,https://complygem-frontend.vercel.app"
     frontend_url: str = ""
 
     upload_dir: str = "./uploads"
@@ -33,7 +33,11 @@ class Settings(BaseSettings):
     def _normalize_db_url(cls, value: str | None) -> str:
         if not value:
             return "sqlite:///./complygem.db"
-        val = str(value).strip()
+        val = str(value).strip().strip('"').strip("'")
+        if "pgbouncer=true" in val:
+            val = val.replace("?pgbouncer=true&", "?")
+            val = val.replace("&pgbouncer=true", "")
+            val = val.replace("?pgbouncer=true", "")
         if val.startswith("postgres://"):
             val = val.replace("postgres://", "postgresql+psycopg://", 1)
         elif val.startswith("postgresql://") and not val.startswith("postgresql+psycopg://"):
